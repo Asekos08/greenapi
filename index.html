@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .output-container {
+            width: 50%;
+            padding-left: 20px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            height: 500px;
+            overflow-y: scroll;
+        }
+        .label {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="idInstance">idInstance:</label>
+        <input type="password" id="idInstance">
+        
+        <label for="apiTokenInstance">ApiTokenInstance:</label>
+        <input type="password" id="apiTokenInstance">
+    
+        <button onclick="getSettings()">getSettings</button>
+        <button onclick="getStateInstance()">getStateInstance</button>
+    
+        <input type="text" id="chatId" placeholder="77473086707">
+        <input type="text" id="message" placeholder="Hello World!">
+        <button onclick="sendMessage()">sendMessage</button>
+    
+        <input type="text" id="chatIdFile" placeholder="77771234567">
+        <input type="text" id="fileUrl" placeholder="your file link">
+        <button onclick="sendFileByUrl()">sendFileByUrl</button>
+    </div>
+    
+    <div class="output-container">
+        <div class="label">Ответ:</div>
+        <div class="output" id="output"></div>
+    </div>
+    
+    <script>
+        const backendUrl = 'http://127.0.0.1:8000';
+
+        async function getSettings() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            const response = await fetch(`${backendUrl}/getSettings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idInstance, apiTokenInstance })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                document.getElementById('output').innerText = JSON.stringify(errorData, null, 2);
+                return;
+            }
+            const data = await response.json();
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function getStateInstance() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            const response = await fetch(`${backendUrl}/getStateInstance`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idInstance, apiTokenInstance })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                document.getElementById('output').innerText = JSON.stringify(errorData, null, 2);
+                return;
+            }
+            const data = await response.json();
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function sendMessage() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            const chatId = document.getElementById('chatId').value;
+            const message = document.getElementById('message').value;
+            const response = await fetch(`${backendUrl}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idInstance, apiTokenInstance, chatId, message })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                document.getElementById('output').innerText = JSON.stringify(errorData, null, 2);
+                return;
+            }
+            const data = await response.json();
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function sendFileByUrl() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            const chatId = document.getElementById('chatIdFile').value;
+            const urlFile = document.getElementById('fileUrl').value;
+            const response = await fetch(`${backendUrl}/sendFileByUrl`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idInstance, apiTokenInstance, chatId, urlFile, fileName: urlFile.split('/').pop(), caption: "Here is your file" })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                document.getElementById('output').innerText = JSON.stringify(errorData, null, 2);
+                return;
+            }
+            const data = await response.json();
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
