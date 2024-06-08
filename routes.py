@@ -1,9 +1,11 @@
 from .models import InstanceData, MessageData, FileData
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException
 import requests
-from .main import app
 
-@app.post("/getSettings")
+
+router = APIRouter()
+
+@router.post("/getSettings")
 async def get_settings(data: InstanceData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/getSettings/{data.apiTokenInstance}"
     response = requests.get(url)
@@ -11,7 +13,7 @@ async def get_settings(data: InstanceData):
         raise HTTPException(status_code=response.status_code, detail=response.json())
     return response.json()
 
-@app.post("/getStateInstance")
+@router.post("/getStateInstance")
 async def get_state_instance(data: InstanceData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/getStateInstance/{data.apiTokenInstance}"
     response = requests.get(url)
@@ -19,7 +21,7 @@ async def get_state_instance(data: InstanceData):
         raise HTTPException(status_code=response.status_code, detail=response.json())
     return response.json()
 
-@app.post("/sendMessage")
+@router.post("/sendMessage")
 async def send_message(data: MessageData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/sendMessage/{data.apiTokenInstance}"
     payload = {
@@ -31,7 +33,7 @@ async def send_message(data: MessageData):
         raise HTTPException(status_code=response.status_code, detail=response.json())
     return response.json()
 
-@app.post("/sendFileByUrl")
+@router.post("/sendFileByUrl")
 async def send_file_by_url(data: FileData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/sendFileByUrl/{data.apiTokenInstance}"
     payload = {
