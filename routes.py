@@ -1,4 +1,4 @@
-from .models import InstanceData, MessageData, FileData
+from models import InstanceData, MessageData, FileData
 from fastapi import APIRouter, HTTPException
 import requests
 
