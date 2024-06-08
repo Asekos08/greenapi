@@ -54,7 +54,7 @@ async def get_state_instance(data: InstanceData):
 async def send_message(data: MessageData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/sendMessage/{data.apiTokenInstance}"
     payload = {
-        "chatId": data.chatId,
+        "chatId": f"{data.chatId}@c.us",
         "message": data.message
     }
     response = requests.post(url, json=payload)
@@ -66,7 +66,7 @@ async def send_message(data: MessageData):
 async def send_file_by_url(data: FileData):
     url = f"https://api.green-api.com/waInstance{data.idInstance}/sendFileByUrl/{data.apiTokenInstance}"
     payload = {
-        "chatId": data.chatId,
+        "chatId": f"{data.chatId}@c.us",
         "urlFile": data.urlFile,
         "fileName": data.fileName,
         "caption": data.caption
